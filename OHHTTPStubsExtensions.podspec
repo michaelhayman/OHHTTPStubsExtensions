@@ -9,34 +9,25 @@
 Pod::Spec.new do |s|
   s.name             = "OHHTTPStubsExtensions"
   s.version          = "0.1.0"
-  s.summary          = "A short description of OHHTTPStubsExtensions."
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.summary          = "Extends OHHTTPStubs with extra functionality for standardized testing."
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+    This pod extends and standardizes the use of OHHTTPStubs for both unit and UI testing.
 
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/OHHTTPStubsExtensions"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+    It includes certain helper methods which expect bundles to be set up in a certain way.
+
+    The bundles are independent of code and the JSON returned from the server is stored in the
+    bundles.
+  DESC
+
+  s.homepage         = "https://github.com/michaelhayman/OHHTTPStubsExtensions"
   s.license          = 'MIT'
   s.author           = { "Michael Hayman" => "michael@springbox.ca" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/OHHTTPStubsExtensions.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => "https://github.com/michaelhayman/OHHTTPStubsExtensions.git", :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'OHHTTPStubsExtensions/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'OHHTTPStubsExtensions' => ['OHHTTPStubsExtensions/Assets/*.png']
-  # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  # s.dependency 'OHHTTPStubs', '~> 2.3'
 end

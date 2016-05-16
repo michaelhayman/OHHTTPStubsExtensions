@@ -1,0 +1,6 @@
+framework module Pods_OHHTTPStubsExtensions_Example {
+  umbrella header "Pods-OHHTTPStubsExtensions_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

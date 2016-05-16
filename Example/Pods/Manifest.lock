@@ -1,0 +1,16 @@
+PODS:
+  - OHHTTPStubsExtensions (0.1.0)
+
+DEPENDENCIES:
+  - OHHTTPStubsExtensions (from `../`)
+
+EXTERNAL SOURCES:
+  OHHTTPStubsExtensions:
+    :path: ../
+
+SPEC CHECKSUMS:
+  OHHTTPStubsExtensions: 1426a6998f39b1a8f6fdaee60aa527eb973cc7ba
+
+PODFILE CHECKSUM: dd471e7fbf381e7e1ba92d4c7db4fdae434d8a7a
+
+COCOAPODS: 1.0.0
