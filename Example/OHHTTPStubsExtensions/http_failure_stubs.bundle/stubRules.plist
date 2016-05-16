@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>matching_url</key>
+		<string>.*/recommendations</string>
+		<key>json_file</key>
+		<string>GET_Recommendations_422</string>
+		<key>status_code</key>
+		<string>422</string>
+		<key>http_method</key>
+		<string>GET</string>
+		<key>inline_response</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>matching_url</key>
+		<string>.*/medications</string>
+		<key>json_file</key>
+		<string>GET_Medications_422</string>
+		<key>status_code</key>
+		<string>422</string>
+		<key>http_method</key>
+		<string>GET</string>
+		<key>inline_response</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>matching_url</key>
+		<string>.*/medications</string>
+		<key>json_file</key>
+		<string>POST_Medication_422</string>
+		<key>status_code</key>
+		<string>422</string>
+		<key>http_method</key>
+		<string>POST</string>
+		<key>inline_response</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>matching_url</key>
+		<string>.*/profiles</string>
+		<key>json_file</key>
+		<string>GET_Profiles_422</string>
+		<key>status_code</key>
+		<string>422</string>
+		<key>http_method</key>
+		<string>GET</string>
+		<key>inline_response</key>
+		<string></string>
+	</dict>
+</array>
+</plist>

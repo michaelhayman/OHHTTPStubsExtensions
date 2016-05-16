@@ -27,3 +27,8 @@ Michael Hayman, michael@springbox.ca
 ## License
 
 OHHTTPStubsExtensions is available under the MIT license. See the LICENSE file for more info.
+
+## Usage
+
+`HTTPStubber.applyStubsInBundleWithName("http_success_stubs")`
+

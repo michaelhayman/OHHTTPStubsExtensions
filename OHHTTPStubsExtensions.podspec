@@ -29,5 +29,5 @@ Pod::Spec.new do |s|
 
   s.source_files = 'OHHTTPStubsExtensions/Classes/**/*'
 
-  # s.dependency 'OHHTTPStubs', '~> 2.3'
+  s.dependency 'OHHTTPStubs', '~> 5.0'
 end
