@@ -1,9 +1,7 @@
 //
 //  HTTPStubber.swift
-//  MyTicker
 //
 //  Created by Michael Hayman on 2016-02-25.
-//  Copyright © 2016 MyTicker, Inc. All rights reserved.
 //
 
 let MappingFilename = "stubRules"
@@ -15,13 +13,13 @@ let InlineResponse = "inline_response"
 
 import OHHTTPStubs
 
-final public class HTTPStubber {
-    
+public class HTTPStubber {
+
     class func removeAllStubs() {
         OHHTTPStubs.removeAllStubs()
     }
 
-    class func applyStubsInBundleWithName(bundleName: String) {
+    public class func applyStubsInBundleWithName(bundleName: String) {
         let bundlePath = NSBundle.mainBundle().pathForResource(bundleName, ofType: "bundle")!
         let bundle = NSBundle(path: bundlePath)
         let mappingFilePath = bundle?.pathForResource(MappingFilename, ofType: "plist")
@@ -35,8 +33,44 @@ final public class HTTPStubber {
             let httpMethod = stubInfo[HTTPMethod] as! String
 
             let stub = OHHTTPStubs.stubURLThatMatchesPattern(matchingURL, jsonFileName: jsonFile, statusCode: statusCode, HTTPMethod: httpMethod, bundle: bundle!)
-            print("stub loaded \(stub)");
         })
+    }
+
+    class func applySingleStubInBundleWithName(bundleName bundleName: String, stubName: String) {
+
+    }
+//}
+
+// extension HTTPStubber {
+    class func stubAPICallsIfNeeded() {
+        if isRunningAutomationTests() {
+            stubAPICalls()
+        }
+    }
+
+    class func isRunningAutomationTests() -> Bool {
+        if NSProcessInfo.processInfo().arguments.contains("RUNNING_AUTOMATION_TESTS") {
+            return true
+        }
+        return false
+    }
+
+    class func stubAPICalls() {
+        // e.g. if 'STUB_API_CALLS_stubsTemplate_addresses' is received as argument
+        // we globally stub the app using the 'stubsTemplate_addresses.bundle'
+        let stubPrefix = "STUB_API_CALLS_"
+
+        let stubPrefixForPredicate = stubPrefix.stringByAppendingString("*");
+
+        let predicate = NSPredicate(format: "SELF like \(stubPrefixForPredicate)")
+
+        let filteredArray = NSProcessInfo.processInfo().arguments.filter { predicate.evaluateWithObject($0) }
+
+        let bundleName = filteredArray.first?.stringByReplacingOccurrencesOfString(stubPrefix, withString: "")
+
+        if let bundleName = bundleName {
+            HTTPStubber.applyStubsInBundleWithName(bundleName)
+        }
     }
 }
 

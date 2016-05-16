@@ -1,19 +1,24 @@
 {
   "name": "OHHTTPStubsExtensions",
   "version": "0.1.0",
-  "summary": "A short description of OHHTTPStubsExtensions.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/OHHTTPStubsExtensions",
+  "summary": "Extends OHHTTPStubs with extra functionality for standardized testing.",
+  "description": "This pod extends and standardizes the use of OHHTTPStubs for both unit and UI testing.\n\nIt includes certain helper methods which expect bundles to be set up in a certain way.\n\nThe bundles are independent of code and the JSON returned from the server is stored in the\nbundles.",
+  "homepage": "https://github.com/michaelhayman/OHHTTPStubsExtensions",
   "license": "MIT",
   "authors": {
     "Michael Hayman": "michael@springbox.ca"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/OHHTTPStubsExtensions.git",
+    "git": "https://github.com/michaelhayman/OHHTTPStubsExtensions.git",
     "tag": "0.1.0"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "OHHTTPStubsExtensions/Classes/**/*"
+  "source_files": "OHHTTPStubsExtensions/Classes/**/*",
+  "dependencies": {
+    "OHHTTPStubs": [
+      "~> 5.0"
+    ]
+  }
 }

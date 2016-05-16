@@ -4,33 +4,9 @@
 <array>
 	<dict>
 		<key>matching_url</key>
-		<string>.*/recommendations</string>
+		<string>.*/sign_up</string>
 		<key>json_file</key>
-		<string>GET_Recommendations_422</string>
-		<key>status_code</key>
-		<string>422</string>
-		<key>http_method</key>
-		<string>GET</string>
-		<key>inline_response</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>matching_url</key>
-		<string>.*/medications</string>
-		<key>json_file</key>
-		<string>GET_Medications_422</string>
-		<key>status_code</key>
-		<string>422</string>
-		<key>http_method</key>
-		<string>GET</string>
-		<key>inline_response</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>matching_url</key>
-		<string>.*/medications</string>
-		<key>json_file</key>
-		<string>POST_Medication_422</string>
+		<string>POST_SignUp_422</string>
 		<key>status_code</key>
 		<string>422</string>
 		<key>http_method</key>
@@ -40,9 +16,9 @@
 	</dict>
 	<dict>
 		<key>matching_url</key>
-		<string>.*/profiles</string>
+		<string>.*/medications</string>
 		<key>json_file</key>
-		<string>GET_Profiles_422</string>
+		<string>GET_Medications_422</string>
 		<key>status_code</key>
 		<string>422</string>
 		<key>http_method</key>
