@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'OHHTTPStubsExtensions_Example' do
+  pod 'OHHTTPStubsExtensions', :path => '../'
+
+  target 'OHHTTPStubsExtensions_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
