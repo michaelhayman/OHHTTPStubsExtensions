@@ -2,7 +2,6 @@
 //  HTTPStubber.swift
 //
 //  Created by Michael Hayman on 2016-02-25.
-//
 
 let MappingFilename = "stubRules"
 let MatchingURL = "matching_url"
@@ -13,42 +12,75 @@ let InlineResponse = "inline_response"
 
 import OHHTTPStubs
 
-public class HTTPStubber {
-
-    class func removeAllStubs() {
+@objc public class HTTPStubber: NSObject {
+    public class func removeAllStubs() {
         OHHTTPStubs.removeAllStubs()
     }
 
     public class func applyStubsInBundleWithName(bundleName: String) {
+        guard let bundle = retrieveBundle(bundleName: bundleName) else { return }
+        guard let mappings = retrieveMappingsForBundle(bundle: bundle) else { return }
+
+        for (index, stubInfo) in mappings.enumerate() {
+            if let stubInfo = stubInfo as? NSDictionary {
+                stub(stubInfo, bundle: bundle)
+            }
+        }
+    }
+
+    public class func applySingleStubInBundleWithName(bundle bundleName: String, resource: String) {
+        guard let bundle = retrieveBundle(bundleName: bundleName) else { return }
+        guard let mappings = retrieveMappingsForBundle(bundle: bundle) else { return }
+
+        if let stubInfo = mappings.filter({ (element) -> Bool in
+            if let element = element as? NSDictionary {
+                return element[JSONFile] as! String == resource
+            } else {
+                return false
+            }
+        }).first {
+            stub(stubInfo, bundle: bundle)
+        }
+    }
+
+    class func stub(stubInfo: NSDictionary, bundle: NSBundle) {
+        let matchingURL = stubInfo[MatchingURL] as! String
+        let jsonFile = stubInfo[JSONFile] as! String
+        let statusCodeString = stubInfo[StatusCode] as! String
+        let statusCode = Int(statusCodeString)!
+        let httpMethod = stubInfo[HTTPMethod] as! String
+        OHHTTPStubs.stubURLThatMatchesPattern(matchingURL, jsonFileName: jsonFile, statusCode: statusCode, HTTPMethod: httpMethod, bundle: bundle)
+    }
+
+    class func retrieveBundle(bundleName bundleName: String) -> NSBundle? {
         let bundlePath = NSBundle.mainBundle().pathForResource(bundleName, ofType: "bundle")!
         let bundle = NSBundle(path: bundlePath)
-        let mappingFilePath = bundle?.pathForResource(MappingFilename, ofType: "plist")
-        let mapping = NSArray(contentsOfFile: mappingFilePath!)
-
-        mapping?.enumerateObjectsUsingBlock({ stubInfo, index, stop in
-            let matchingURL = stubInfo[MatchingURL] as! String
-            let jsonFile = stubInfo[JSONFile] as! String
-            let statusCodeString = stubInfo[StatusCode] as! String
-            let statusCode = Int(statusCodeString)!
-            let httpMethod = stubInfo[HTTPMethod] as! String
-
-            let stub = OHHTTPStubs.stubURLThatMatchesPattern(matchingURL, jsonFileName: jsonFile, statusCode: statusCode, HTTPMethod: httpMethod, bundle: bundle!)
-        })
+        return bundle
     }
 
-    class func applySingleStubInBundleWithName(bundleName bundleName: String, stubName: String) {
-
+    class func retrieveMappingsForBundle(bundle bundle: NSBundle) -> [NSDictionary]? {
+        let mappingFilePath = bundle.pathForResource(MappingFilename, ofType: "plist")
+        let mapping = NSArray(contentsOfFile: mappingFilePath!) as! [NSDictionary]
+        return mapping
     }
-//}
 
-// extension HTTPStubber {
-    class func stubAPICallsIfNeeded() {
+    public class func retrieveDataFromBundleWithName(bundle bundleName: String, resource: String) -> NSData? {
+        let bundle = NSBundle.mainBundle()
+
+        guard let bundlePath = bundle.pathForResource(bundleName, ofType: "bundle") else { return nil }
+        guard let jsonBundle = NSBundle(path: bundlePath) else { return nil }
+        guard let path = jsonBundle.pathForResource(resource, ofType: "json") else { return nil }
+
+        return NSData(contentsOfFile: path)
+    }
+
+    public class func stubAPICallsIfNeeded() {
         if isRunningAutomationTests() {
             stubAPICalls()
         }
     }
 
-    class func isRunningAutomationTests() -> Bool {
+    public class func isRunningAutomationTests() -> Bool {
         if NSProcessInfo.processInfo().arguments.contains("RUNNING_AUTOMATION_TESTS") {
             return true
         }
@@ -62,7 +94,7 @@ public class HTTPStubber {
 
         let stubPrefixForPredicate = stubPrefix.stringByAppendingString("*");
 
-        let predicate = NSPredicate(format: "SELF like \(stubPrefixForPredicate)")
+        let predicate = NSPredicate(format: "SELF like %@", stubPrefixForPredicate)
 
         let filteredArray = NSProcessInfo.processInfo().arguments.filter { predicate.evaluateWithObject($0) }
 
@@ -73,4 +105,3 @@ public class HTTPStubber {
         }
     }
 }
-

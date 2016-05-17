@@ -1,9 +1,7 @@
 //
 //  OHHTTPStubs+Extension.swift
-//  MyTicker
 //
 //  Created by Michael Hayman on 2016-02-25.
-//  Copyright © 2016 MyTicker, Inc. All rights reserved.
 //
 
 import UIKit
@@ -11,29 +9,23 @@ import OHHTTPStubs
 
 extension OHHTTPStubs {
     class func stubURLThatMatchesPattern(regexPattern: String, jsonFileName: String, statusCode: Int, HTTPMethod: String, bundle: NSBundle) -> AnyObject? {
-        // let targetBundle: NSBundle = bundle ? bundle : NSBundle(forClass: object_getClass(self))
-        let targetBundle = bundle
-
-        let path = targetBundle.pathForResource(jsonFileName, ofType: "json")
+        guard let path = bundle.pathForResource(jsonFileName, ofType: "json") else { return nil }
        
-        var responseString: String?
-
         do {
-            responseString = try String(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-        } catch _ {
-            print("error")
+            let responseString = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+            return self._stubURLThatMatchesPattern(regexPattern, responseString: responseString, statusCode: statusCode, HTTPMethod: HTTPMethod)
+        } catch {
+            print("Parse error \(error)")
             return nil
         }
-
-        return self._stubURLThatMatchesPattern(regexPattern, responseString: responseString!, statusCode: statusCode, HTTPMethod: HTTPMethod)
     }
 
     class func _stubURLThatMatchesPattern(regexPattern: String, responseString: String, statusCode: Int, HTTPMethod: String) -> AnyObject? {
         var regex: NSRegularExpression
         do {
             regex = try NSRegularExpression(pattern: regexPattern, options: [])
-        } catch _ {
-            print("regex error")
+        } catch {
+            print("Regular expression error \(error)")
             return nil
         }
         
