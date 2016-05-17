@@ -1,6 +1,7 @@
 import UIKit
 import XCTest
 import OHHTTPStubsExtensions
+import OHHTTPStubs
 
 class HTTPStubberTests: XCTestCase {
     
@@ -10,10 +11,18 @@ class HTTPStubberTests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
+        HTTPStubber.removeAllStubs()
+    }
+
+    func testRemoveAllStubs() {
+        HTTPStubber.applyStubsInBundleWithName("http_success_stubs")
+        HTTPStubber.removeAllStubs()
+        XCTAssertEqual(0, OHHTTPStubs.allStubs().count)
     }
     
     func testApplyAllStubs() {
         HTTPStubber.applyStubsInBundleWithName("http_success_stubs")
+        XCTAssertEqual(2, OHHTTPStubs.allStubs().count)
 
         guard let requestURL = NSURL(string: "https://example.com/sign_up") else {
             XCTFail("Invalid URL.")
@@ -45,6 +54,7 @@ class HTTPStubberTests: XCTestCase {
 
     func testSpecificStub() {
         HTTPStubber.applySingleStubInBundleWithName(bundle: "http_success_stubs", resource: "GET_Medications_200")
+        XCTAssertEqual(1, OHHTTPStubs.allStubs().count)
 
         runMedicationTest()
     }
