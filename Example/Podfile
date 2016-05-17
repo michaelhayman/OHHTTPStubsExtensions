@@ -5,7 +5,5 @@ target 'OHHTTPStubsExtensions_Example' do
 
   target 'OHHTTPStubsExtensions_Tests' do
     inherit! :search_paths
-
-    
   end
 end
