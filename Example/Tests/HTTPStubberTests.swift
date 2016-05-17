@@ -25,7 +25,17 @@ class HTTPStubberTests: XCTestCase {
     }
 
     func testLoadData() {
-        let data = HTTPStubber.retrieveDataFromBundleWithName(bundle: "http_success_stubs", resource: "POST_SignUp_200.json")
-        XCTAssertNotNil(data)
+        if let data = HTTPStubber.retrieveDataFromBundleWithName(bundle: "http_success_stubs", resource: "POST_SignUp_200") {
+            XCTAssertNotNil(data)
+            if let json = NSString(data: data, encoding:NSUTF8StringEncoding) {
+                XCTAssertNotNil(json)
+                let expectedString = "{\n    \"access_token\": \"asdf\"\n}"
+                XCTAssertEqual(expectedString, json)
+            } else {
+                XCTFail("Failed to convert data to string.")
+            }
+        } else {
+            XCTFail("Failed to find data in bundle.")
+        }
     }
 }
