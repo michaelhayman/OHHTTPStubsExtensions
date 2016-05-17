@@ -4,6 +4,16 @@
 [![License](https://img.shields.io/cocoapods/l/OHHTTPStubsExtensions.svg?style=flat)](http://cocoapods.org/pods/OHHTTPStubsExtensions)
 [![Platform](https://img.shields.io/cocoapods/p/OHHTTPStubsExtensions.svg?style=flat)](http://cocoapods.org/pods/OHHTTPStubsExtensions)
 
+## Overview
+
+Quickly stub out the network for both your unit tests and UI tests in as few lines of
+code as possible.
+
+Concentrate on maintaining the JSON as returned from the API in a few bundles inside of your app.
+
+The basis for this technique came from an article on the
+[justeat blog](http://tech.just-eat.com/2015/11/23/offline-ui-testing-on-ios-with-stubs/).
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -15,30 +25,25 @@ You can also run the tests to understand how the library works from within the d
 ### Cocoapods
 
 OHHTTPStubsExtensions is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+it, simply add the following line to your Podfile for both your main target and your
+unit test target:
 
 ```ruby
 pod "OHHTTPStubsExtensions"
 ```
 
-It will install the underlying library `OHHTTPStubs` automatically.
+This pod will install the underlying library `OHHTTPStubs` automatically.
 
 ### Carthage
 
 TBA
 
-## Inspiration & Credit
-
-The basis for this technique came from the
-[justeat blog](http://tech.just-eat.com/2015/11/23/offline-ui-testing-on-ios-with-stubs/).
-
 ## Usage
 
 ### Target 
 
-If using UI tests, add this pod and the JSON response bundles to your main target.
-
-Otherwise, add them to the unit testing target.
+Add the JSON response bundles to your main target so they can be accessed by both UI
+and unit tests.
 
 ### JSON response bundles
 
@@ -47,9 +52,15 @@ and which JSON to load for that response.
 
 There are examples in the demo.
 
+The URLs in the response bundles accept regular expressions. See the tests and the
+bundles for examples.
+
 ### UI Tests
 
-In a UI test, you would use it like this:
+Because the UI tests don't have their own specialized environment, unfortunately testing
+code needs to be added to your main target.
+
+Add the following code to your UI test:
 
 ```swift
 app = XCUIApplication()
@@ -62,7 +73,7 @@ app.launchArguments = [
 
 The string `http_success_stubs` should be replaced with the name of the
 JSON responses bundle you are loading. For example, you can load a bundle called
-`http_failure_stubs` as well.
+`http_failure_stubs` to test your error code.
 
 In your app target, call the following function in AppDelegate:
 
@@ -84,16 +95,18 @@ In your app target, call the following function in AppDelegate:
 
 ### Unit tests
 
-In a unit test, you apply stubs like this:
+Add the following code to your unit test:
 
 ```swift
 @import OHHTTPStubsExtensions
 
 func setUp() {
+    super.setUp()
     HTTPStubber.applyStubsInBundleWithName("http_success_stubs")
 }
 
 func tearDown() {
+    super.tearDown()
     HTTPStubbber.removeAllStubs()
 }
 ```
@@ -101,16 +114,39 @@ func tearDown() {
 ```objc
 #import "OHHTTPStubsExtensions-Swift.h"
 
-...
++ (void)setUp {
+    [super setUp];
+
+    [HTTPStubber applyStubsInBundleWithName:@"http_success_stubs"];
+}
+
++ (void)tearDown {
+    [super tearDown];
+
+    [HTTPStubber removeAllStubs];
+}
+
 ```
 
 You can also call this at the top level of your unit tests in a class method
 and it will only be invoked once for the entire set of unit tests for that
-class.
+class.  There are additional methods to:
+
+* apply the stubs in each bundle selectively;
+* load the JSON from a stub into an NSData object (for example to test your parser code)
 
 ## Tests
 
-xcodebuild -workspace Example/OHHTTPStubsExtensions.xcworkspace -scheme OHHTTPStubsExtensions-Example -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=9.3' test
+After doing a `pod install` in the `Example` project:
+
+```
+xcodebuild \
+    -workspace Example/OHHTTPStubsExtensions.xcworkspace \
+    -scheme OHHTTPStubsExtensions-Example \
+    -sdk iphonesimulator \
+    -destination 'platform=iOS Simulator,name=iPhone 6,OS=9.3' \
+    test
+````
 
 ## Author
 
@@ -119,3 +155,4 @@ Michael Hayman, michael@springbox.ca
 ## License
 
 OHHTTPStubsExtensions is available under the MIT license. See the LICENSE file for more info.
+
