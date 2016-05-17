@@ -1,14 +1,2 @@
 {
-    "medications": [{
-        "id": 99,
-        "profile_id": 260,
-        "name": "Prozac",
-        "details": null,
-        "medication_frequencies": [ {
-            "id": 52,
-            "medication_id": 99,
-            "frequency": "daily",
-            "time": "1980-06-20T09:30:00.000Z"
-        }]
-    }]
 }

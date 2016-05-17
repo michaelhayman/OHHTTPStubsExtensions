@@ -1,7 +1,7 @@
 //
 //  HTTPStubber.swift
 //
-//  Created by Michael Hayman on 2016-02-25.
+//  Created by Michael Hayman on 2016-05-16.
 
 let MappingFilename = "stubRules"
 let MatchingURL = "matching_url"
