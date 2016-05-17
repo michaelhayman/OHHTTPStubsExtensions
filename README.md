@@ -108,6 +108,10 @@ You can also call this at the top level of your unit tests in a class method
 and it will only be invoked once for the entire set of unit tests for that
 class.
 
+## Tests
+
+xcodebuild -workspace Example/OHHTTPStubsExtensions.xcworkspace -scheme OHHTTPStubsExtensions-Example -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=9.3' test
+
 ## Author
 
 Michael Hayman, michael@springbox.ca
