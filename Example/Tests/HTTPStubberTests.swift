@@ -36,8 +36,6 @@ class HTTPStubberTests: XCTestCase {
         NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { [weak self] (data, response, error) -> Void in
             guard let weakSelf = self else { return }
 
-            e.fulfill()
-
             if let data = data {
                 XCTAssertNotNil(data)
                 weakSelf.verifySignUpData(data)
@@ -48,6 +46,9 @@ class HTTPStubberTests: XCTestCase {
             weakSelf.verifyResponseCode(response: response, statusCode: 200)
 
             XCTAssertNil(error)
+
+            e.fulfill()
+
         }).resume()
 
         waitForExpectationsWithTimeout(3, handler: nil)
@@ -60,6 +61,33 @@ class HTTPStubberTests: XCTestCase {
         XCTAssertEqual(1, OHHTTPStubs.allStubs().count)
 
         runMedicationTest()
+    }
+
+    func testSpecificFailingStub() {
+        HTTPStubber.applySingleStubInBundleWithName(bundle: "http_failure_stubs", resource: "POST_SignUp_422")
+        XCTAssertEqual(1, OHHTTPStubs.allStubs().count)
+
+        guard let requestURL = NSURL(string: "https://example.com/sign_up") else {
+            XCTFail("Invalid URL.")
+            return
+        }
+
+        let request = NSMutableURLRequest(URL: requestURL)
+        request.HTTPMethod = "POST"
+
+        let e = expectationWithDescription("Hitting sign up endpoint and it should fail")
+
+        NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
+            if let error = error {
+                XCTAssertNotNil(error)
+            } else {
+                XCTFail("There should be an error here.")
+            }
+
+            e.fulfill()
+        }).resume()
+
+        waitForExpectationsWithTimeout(3, handler: nil)
     }
 
     func testIsRunningAutomationTestsFalse() {
@@ -100,8 +128,6 @@ extension HTTPStubberTests {
         NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { [weak self] (data, response, error) -> Void in
             guard let weakSelf = self else { return }
 
-            e.fulfill()
-
             if let data = data {
                 XCTAssertNotNil(data)
                 weakSelf.verifyMedicationData(data)
@@ -110,6 +136,8 @@ extension HTTPStubberTests {
             }
 
             XCTAssertNil(error)
+
+            e.fulfill()
         }).resume()
 
         waitForExpectationsWithTimeout(3, handler: nil)
