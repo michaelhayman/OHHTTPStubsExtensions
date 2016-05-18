@@ -42,11 +42,18 @@ extension OHHTTPStubs {
             return false
         }) { (request) -> OHHTTPStubsResponse in
 
-            let response = responseString.dataUsingEncoding(NSUTF8StringEncoding)
+            guard let response = responseString.dataUsingEncoding(NSUTF8StringEncoding) else { return OHHTTPStubsResponse() }
 
             let headers = [ "Content-Type": "application/json; charset=utf-8" ]
 
-            return OHHTTPStubsResponse(data: response!, statusCode: Int32(statusCode), headers: headers)
+            let statusCode = Int32(statusCode)
+
+            if statusCode == 422 || statusCode == 500 {
+                let error = NSError(domain: NSURLErrorDomain, code: Int(CFNetworkErrors.CFURLErrorCannotLoadFromNetwork.rawValue), userInfo: nil)
+                return OHHTTPStubsResponse(error: error)
+            }
+
+            return OHHTTPStubsResponse(data: response, statusCode: statusCode, headers: headers)
         }
     }
 }
